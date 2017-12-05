@@ -40,7 +40,11 @@ libraryDependencies ++= Seq(
   "org.scalaz" %% "scalaz-concurrent" % scalazVersion,
   "com.typesafe.play" %% "play-iteratees" % "2.6.1",
   "co.fs2" %% "fs2-core" % "0.9.6",
-  "co.fs2" %% "fs2-io" % "0.9.6"
+  "co.fs2" %% "fs2-io" % "0.9.6",
+
+  "org.json4s" %% "json4s-native" % "{latestVersion}",
+  "org.twitter4j" % "twitter4j-core" % "4.0.6",
+  "com.google.code.gson" % "gson" % "2.8.2"
 )
 
 fork := true
@@ -53,17 +57,19 @@ resolvers ++= Seq(
   "TM" at "http://maven.twttr.com",
   "Typesafe Snapshots" at "http://repo.typesafe.com/typesafe/snapshots/",
   "Secured Central Repository" at "https://repo1.maven.org/maven2",
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("snapshots"),
+  "Local Maven" at Path.userHome.asFile.toURI.toURL + ".m2/repository"
+
 )
 
 // scalariform
 //scalariformSettings
 
-ScalariformKeys.preferences := ScalariformKeys.preferences.value
-  .setPreference(AlignSingleLineCaseStatements, true)
-  .setPreference(DoubleIndentClassDeclaration, true)
-  .setPreference(IndentLocalDefs, true)
-  .setPreference(IndentPackageBlocks, true)
-  .setPreference(IndentSpaces, 2)
-  .setPreference(MultilineScaladocCommentsStartOnFirstLine, false)
+//ScalariformKeys.preferences := ScalariformKeys.preferences.value
+//  .setPreference(AlignSingleLineCaseStatements, true)
+//  .setPreference(DoubleIndentClassDeclaration, true)
+//  .setPreference(IndentLocalDefs, true)
+//  .setPreference(IndentPackageBlocks, true)
+//  .setPreference(IndentSpaces, 2)
+//  .setPreference(MultilineScaladocCommentsStartOnFirstLine, false)
 

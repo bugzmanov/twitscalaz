@@ -3,3 +3,4 @@
 .idea
 application.conf
 target
+twitter4j.properties

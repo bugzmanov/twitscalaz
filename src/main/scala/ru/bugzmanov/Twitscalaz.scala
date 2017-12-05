@@ -7,6 +7,8 @@ import com.danielasfregola.twitter4s.entities.Tweet
 import com.danielasfregola.twitter4s.{RestClients, TwitterRestClient}
 import fs2.{Pull, Strategy, Task}
 import play.api.libs.iteratee.Execution.Implicits
+//import ru.bugzmanov.Twitscalaz.twitter
+import twitter4j._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -22,7 +24,6 @@ final class FutureExtensionOps[A](x: => Future[A])( implicit strategy: Strategy)
     }
   }
 }
-
 
 object Twitscalaz extends App {
 
@@ -40,6 +41,17 @@ object Twitscalaz extends App {
     }).asTask
 
 
+  def getTweets2(username: String, page: Int)(implicit twitter: Twitter): Task[Seq[Status]] = Task.delay {
+    twitter.favorites().getFavorites("bugzmanov", new Paging(page, 20)).toArray[Status](Array[Status]()).toSeq
+  }
+
+  def tweetsStorm(username: String, page: Int = 1)(implicit twitter: Twitter): Pull[Task, Status, Unit] = for {
+    res <- Pull.eval(getTweets2(username, page))
+    next <- if(res.isEmpty) Pull.done else Pull.output(fs2.Chunk.seq(res)) >> tweetsStorm(username, page + 1)
+    //res.fold[Pull[Task, Status, Unit]](Pull.done)(o => Pull.output(fs2.Chunk.seq(res)) >> tweetsStorm(username, page + 1))
+  } yield next
+
+
   def getTweetsAll(username: String, maxId: Option[Long]): Task[Seq[Tweet]] = {
     getTweets(username, maxId).flatMap { case (id, tweets) => getTweetsAll(username, id).map(_ ++ tweets) }
   }
@@ -55,13 +67,30 @@ object Twitscalaz extends App {
     tweets.foreach(t => println(t.text))
   }
 
-  import fs2._
+
 
 //  private val log: Task[Vector[Tweet]] =
 
-    getTweetsAllStream("bugzmanov", None).close.take(100).map(_.text).intersperse("\n-----\n")
+  import twitter4j.TwitterFactory
+
+  implicit val twitter: Twitter = TwitterFactory.getSingleton
+
+//  import scala.collection.JavaConverters._
+//
+//  for (i <- 1 to 2) {
+//    val statuses = twitter.favorites().getFavorites("bugzmanov", new Paging(i, 20)).toArray[Status](Array[Status]())
+//    statuses.toVector.foreach { t =>
+//      println(s"${t.getId} = ${t.toString} \n");
+//    }
+//  }
+
+  import com.google.gson.Gson
+
+  val gson = new Gson
+    import fs2._
+    tweetsStorm("bugzmanov").close.take(20).map(gson.toJson).intersperse("\n-----\n")
     .through(text.utf8Encode)
-    .through(io.file.writeAll(Paths.get("celsius.txt")))
+    .through(fs2.io.file.writeAll(Paths.get("celsius.txt")))
     .run.unsafeRun()
 
 //  private val sync: Vector[Tweet] = log.unsafeRun()
