@@ -31,18 +31,13 @@ libraryDependencies ++= Seq(
   // -- Logging --
   "ch.qos.logback" % "logback-classic" % "1.1.3",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
-  // -- json/circe --
-//  "io.circe" %% "circe-core" % CirceVersion,
-//  "io.circe" %% "circe-generic" % CirceVersion,
-//  "io.circe" %% "circe-jawn" % CirceVersion,
-  "com.danielasfregola" %% "twitter4s" % "5.3",
+
   "org.scalaz" %% "scalaz-core" % scalazVersion,
   "org.scalaz" %% "scalaz-concurrent" % scalazVersion,
   "com.typesafe.play" %% "play-iteratees" % "2.6.1",
   "co.fs2" %% "fs2-core" % "0.9.6",
   "co.fs2" %% "fs2-io" % "0.9.6",
 
-  "org.json4s" %% "json4s-native" % "{latestVersion}",
   "org.twitter4j" % "twitter4j-core" % "4.0.6",
   "com.google.code.gson" % "gson" % "2.8.2"
 )
