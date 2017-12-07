@@ -37,6 +37,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-iteratees" % "2.6.1",
   "co.fs2" %% "fs2-core" % "0.9.6",
   "co.fs2" %% "fs2-io" % "0.9.6",
+  "com.spinoco" %% "fs2-http" % "0.1.8",
 
   "org.twitter4j" % "twitter4j-core" % "4.0.6",
   "com.google.code.gson" % "gson" % "2.8.2"
