@@ -1,7 +1,7 @@
 import sbt._
 
 import scalariform.formatter.preferences._
-
+//ololo
 seq(Revolver.settings: _*)
 
 /* scala versions and options */
